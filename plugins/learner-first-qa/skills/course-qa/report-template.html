@@ -1,0 +1,305 @@
+<!doctype html>
+<!--
+  Course QA report template. Do not fill this in by hand.
+  scripts/build-report.js replaces __QA_DATA__ with the review data and writes the HTML and CSV.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Course QA</title>
+<style>
+  /* Fraunces and DM Sans (SIL Open Font License), built into the report so it never loads anything from the web. */
+  /*__FONTS__*/
+  :root {
+    --bg:#fffdf9; --ink:#1f2328; --muted:#535a62; --line:#e9e3d9; --card:#ffffff; --field:#ffffff;
+    --pink:#F5B5C0; --peach:#F4A47C; --yellow:#EACB1A; --blue:#BCDCDE; --gray:#DEDCD7; --mint:#66CF9B;
+    --on-pastel:#1f2328; --focus:#1d5f8c;
+  }
+  @media (prefers-color-scheme: dark) { :root {
+    --bg:#191b1e; --ink:#eeebe5; --muted:#b2b8bf; --line:#34383d; --card:#22252a; --field:#1b1d21; --focus:#8fc3ea;
+  } }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--ink); font:16px/1.55 "DM Sans", system-ui, sans-serif; }
+  main { max-width:1000px; margin:0 auto; padding:32px 16px 72px; }
+  h1, h2, h3 { font-family:"Fraunces", Georgia, serif; line-height:1.15; margin:0; }
+  h1 { font-size:2.6rem; font-weight:800; margin-bottom:16px; }
+  h2 { font-size:1.6rem; font-weight:800; margin:44px 0 6px; }
+  .muted, .note { color:var(--muted); }
+  .note { font-size:.9rem; margin:4px 0 14px; }
+  :focus-visible { outline:3px solid var(--focus); outline-offset:2px; }
+
+  .runcard { background:var(--blue); color:var(--on-pastel); border-radius:14px; padding:18px 20px; }
+  .runcard h2 { margin:0 0 10px; font-size:1.45rem; }
+  .runcard dl { display:grid; grid-template-columns:max-content 1fr; gap:4px 16px; margin:0; font-size:.92rem; }
+  .runcard dt { font-weight:700; } .runcard dd { margin:0; overflow-wrap:anywhere; }
+
+  .nextsteps { margin-top:18px; background:var(--card); border:1px solid var(--line); border-radius:14px; padding:18px 20px; }
+  .nextsteps h2 { margin:0 0 8px; font-size:1.3rem; }
+  .verdict { display:inline-block; font-weight:700; padding:4px 12px; border-radius:999px; color:var(--on-pastel); margin-bottom:10px; }
+  .verdict.no { background:var(--pink); } .verdict.yes { background:var(--mint); }
+  .steps { list-style:none; margin:0 0 12px; padding:0; }
+  .steps li { display:grid; grid-template-columns:15rem 1fr; align-items:center; gap:6px 10px; padding:8px 0; border-bottom:1px solid var(--line); }
+  .steps li:last-child { border-bottom:0; }
+  .steps li > span:last-child { min-width:0; }
+  .steps .badges { display:flex; flex-wrap:wrap; gap:6px; }
+  @media (max-width:560px) { .steps li { grid-template-columns:1fr; } }
+
+  /* Sticky section bar */
+  .jump { position:sticky; top:0; z-index:10; background:var(--bg); border-bottom:1px solid var(--line);
+    margin:28px -16px 0; padding:8px 16px; display:flex; flex-wrap:wrap; gap:6px 16px; align-items:center; }
+  .jump a { color:var(--ink); font-weight:700; font-size:.9rem; text-decoration:none; padding:4px 2px; border-bottom:2px solid transparent; }
+  .jump a:hover { border-bottom-color:var(--ink); }
+  .jump .home { display:inline-flex; padding:4px; border-radius:8px; }
+  .jump .home svg { width:20px; height:20px; }
+  .jump .count { font-weight:400; color:var(--muted); }
+  h2[id] { scroll-margin-top:64px; }
+
+  .toolbar { display:flex; flex-wrap:wrap; gap:8px; align-items:center; margin:10px 0 14px; }
+  .pill { font:inherit; font-size:.85rem; font-weight:700; color:var(--on-pastel); border:2px solid transparent;
+    border-radius:999px; padding:5px 12px; cursor:pointer; }
+  .pill[aria-pressed="true"] { border-color:var(--ink); box-shadow:0 0 0 2px var(--bg) inset; }
+  .pill[aria-pressed="true"]::before { content:"✓ "; }
+  .blocked{background:var(--pink)} .inaccurate{background:var(--peach)} .detracts{background:var(--yellow)}
+  .effort{background:var(--blue)} .minor{background:var(--gray)} .pass{background:var(--mint)}
+  .linkbtn, .btn { font:inherit; font-size:.85rem; color:var(--ink); background:var(--card); border:1px solid var(--line);
+    border-radius:8px; padding:5px 10px; cursor:pointer; }
+  .btn.primary { background:var(--ink); color:var(--bg); border-color:var(--ink); font-weight:700; }
+
+  ol.tasks { list-style:none; margin:0; padding:0; }
+  .task { display:grid; grid-template-columns:auto 1fr; gap:12px; background:var(--card); border:1px solid var(--line);
+    border-radius:12px; padding:14px; margin-bottom:10px; }
+  .task[hidden] { display:none; }
+  .task.dragging { opacity:.5; } .task.over { border-color:var(--focus); border-width:2px; }
+  .side { display:flex; flex-direction:column; align-items:center; gap:6px; }
+  .rank { font-family:"Fraunces", Georgia, serif; font-weight:800; font-size:1.4rem; min-width:2ch; text-align:center; }
+  .grip { cursor:grab; color:var(--muted); font-size:1.2rem; line-height:1; user-select:none; padding:2px 4px; }
+  .head { display:flex; flex-wrap:wrap; gap:8px; align-items:baseline; margin-bottom:4px; }
+  .badge { font-size:.78rem; font-weight:700; padding:2px 9px; border-radius:999px; color:var(--on-pastel); white-space:nowrap; }
+  /* Filled badges = severity. Outlined badges = work for a person. */
+  .badge.confirm, .badge.check { color:var(--ink); background:transparent; border:1.5px solid var(--ink); }
+  .badge.check { border-style:dashed; }
+  .also { font-size:.78rem; color:var(--muted); }
+  .short { font-weight:700; } .num { font-size:.78rem; color:var(--muted); }
+  .what { margin:2px 0; } .impact { margin:2px 0; color:var(--muted); font-size:.92rem; }
+  .where { font-size:.85rem; color:var(--muted); }
+  .controls { display:flex; flex-wrap:wrap; gap:6px; margin-top:8px; align-items:center; }
+  .controls select { font:inherit; font-size:.85rem; color:var(--ink); background:var(--field); border:1px solid var(--line); border-radius:8px; padding:4px 6px; }
+  .notes label { display:block; font-size:.8rem; font-weight:700; margin-top:8px; }
+  .notes textarea { width:100%; min-height:2.4em; font:inherit; font-size:.9rem; color:var(--ink); background:var(--field);
+    border:1px solid var(--line); border-radius:8px; padding:6px 8px; resize:vertical; }
+  .empty { color:var(--muted); font-style:italic; }
+
+  .wrap { overflow-x:auto; }
+  table { width:100%; border-collapse:collapse; background:var(--card); font-size:.9rem; border-radius:12px; }
+  th, td { text-align:left; vertical-align:top; padding:8px 10px; border-bottom:1px solid var(--line); }
+  th { font-size:.75rem; text-transform:uppercase; letter-spacing:.05em; color:var(--muted); }
+  .res { font-size:.78rem; font-weight:700; padding:2px 9px; border-radius:999px; white-space:nowrap; border:1.5px solid currentColor; }
+  .res.Pass { background:var(--mint); color:var(--on-pastel); border-color:transparent; }
+  .res.Finding { background:var(--pink); color:var(--on-pastel); border-color:transparent; }
+  .res.Unconfirmed { color:var(--ink); }
+  .res.Open, .res.NA { color:var(--muted); }
+  .sr-only { position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; }
+  @media (max-width:560px) { h1 { font-size:2.1rem; } .runcard dl { grid-template-columns:1fr; } .runcard dt { margin-top:6px; } }
+  @media (prefers-reduced-motion: no-preference) { .task { transition:border-color .15s; } }
+</style>
+</head>
+<body>
+<main>
+  <h1 id="top">Course QA</h1>
+
+  <section class="runcard" aria-labelledby="course-name">
+    <h2 id="course-name"></h2>
+    <dl id="runfacts"></dl>
+  </section>
+
+  <section class="nextsteps" aria-labelledby="ns-h">
+    <h2 id="ns-h">Your next steps</h2>
+    <div id="verdict" class="verdict"></div>
+    <ol id="steps" class="steps"></ol>
+    <p class="note">Notes and order save in this browser only. Use <strong>Download CSV</strong> to keep them or import them into a Kanban tool.</p>
+    <button type="button" class="btn primary" id="csv">Download CSV</button>
+  </section>
+
+  <nav class="jump" aria-label="Report sections">
+    <a class="home" href="#top" aria-label="Back to top" title="Back to top"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11l9-7 9 7"/><path d="M5 10v10h5v-6h4v6h5V10"/></svg></a>
+    <a href="#fixes-h">Fixes <span class="count" id="n-fixes"></span></a>
+    <a href="#confirms-h">Answers to confirm <span class="count" id="n-confirms"></span></a>
+    <a href="#checks-h">Items to check <span class="count" id="n-checks"></span></a>
+    <a href="#full-h">Full checklist</a>
+  </nav>
+
+  <h2 id="fixes-h">Fixes</h2>
+  <p class="note">Suggested order: by severity, then by how many other levels a finding hits. You and the designer can reorder it.</p>
+  <div class="toolbar" role="group" aria-label="Filter fixes by level" id="filters"></div>
+  <ol class="tasks" id="fixes" aria-labelledby="fixes-h"></ol>
+
+  <h2 id="confirms-h">Answers to confirm</h2>
+  <p class="note">The tool answered these, but it can't be sure. You'll need to confirm or correct each one.</p>
+  <ol class="tasks" id="confirms" aria-labelledby="confirms-h"></ol>
+
+  <h2 id="checks-h">Items to check</h2>
+  <p class="note">The tool can't answer these from the files. You'll need to check these manually.</p>
+  <ol class="tasks" id="checks" aria-labelledby="checks-h"></ol>
+
+  <h2 id="full-h">Full checklist</h2>
+  <p class="note">Every item and its result, for reference.</p>
+  <div class="wrap"><table aria-labelledby="full-h">
+    <thead><tr><th scope="col">Item</th><th scope="col">Criterion</th><th scope="col">Who checks</th><th scope="col">Result</th><th scope="col">Note</th></tr></thead>
+    <tbody id="full"></tbody>
+  </table></div>
+
+  <p id="live" class="sr-only" aria-live="polite" aria-atomic="true"></p>
+</main>
+
+<script type="application/json" id="qa-data">__QA_DATA__</script>
+<script>
+(() => {
+  const D = JSON.parse(document.getElementById("qa-data").textContent);
+  const LEVELS = [["Blocked","blocked"],["Inaccurate","inaccurate"],["Detracts","detracts"],["Adds effort","effort"],["Minor error","minor"]];
+  const cls = l => (LEVELS.find(x => x[0] === l) || [l,""])[1];
+  const KEY = "course-qa:" + D.meta.reportId;
+  const SECTIONS = { fixes: D.fixes, confirms: D.confirms, checks: D.checks };
+  const TITLES = { fixes: "fixes", confirms: "answers to confirm", checks: "items to check" };
+  let state = { order: {}, notes: {}, filters: [] };
+  try { const s = JSON.parse(localStorage.getItem(KEY) || "null"); if (s) state = Object.assign(state, s); } catch (e) {}
+  const save = () => { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {} };
+  const byId = {}; Object.values(SECTIONS).forEach(list => list.forEach(t => byId[t.id] = t));
+  for (const k in SECTIONS) {
+    const ids = SECTIONS[k].map(t => t.id), saved = (state.order[k] || []).filter(id => ids.includes(id));
+    state.order[k] = saved.concat(ids.filter(id => !saved.includes(id)));
+  }
+  const el = (tag, attrs = {}, ...kids) => { const e = document.createElement(tag);
+    for (const [a, v] of Object.entries(attrs)) { if (a === "text") e.textContent = v; else if (a.startsWith("on")) e.addEventListener(a.slice(2), v); else e.setAttribute(a, v); }
+    kids.flat().forEach(k => k != null && e.append(k)); return e; };
+  const live = msg => { const l = document.getElementById("live"); l.textContent = ""; setTimeout(() => l.textContent = msg, 30); };
+
+  // Run card
+  document.getElementById("course-name").textContent = D.meta.course;
+  const facts = [["Source", D.meta.source], ["Reviewed", D.meta.date], ["Run time", D.meta.runTime], ["Tokens used", D.meta.tokens],
+    ["Report", D.meta.htmlPath], ["CSV", D.meta.csvPath]];
+  const dl = document.getElementById("runfacts");
+  facts.forEach(([k, v]) => v && dl.append(el("dt", { text: k }), el("dd", { text: v })));
+
+  // Next steps
+  const v = document.getElementById("verdict");
+  const must = D.fixes.filter(f => f.level === "Blocked" || f.level === "Inaccurate").length;
+  v.textContent = must ? "Not ready to launch" : "Ready to launch, once the steps below are done";
+  v.className = "verdict " + (must ? "no" : "yes");
+  const n = l => D.fixes.filter(f => f.level === l).length;
+  const steps = document.getElementById("steps");
+  // Each step leads with the same pills as the filters, so the colors carry through the page.
+  const step = (badges, text) => { badges = badges.filter(b => b[2] > 0); if (!badges.length) return;
+    steps.append(el("li", {}, el("span", { class: "badges" }, badges.map(([label, c, count]) => el("span", { class: "badge " + c, text: `${label} ${count}` }))), el("span", { text }))); };
+  step([["Blocked", "blocked", n("Blocked")], ["Inaccurate", "inaccurate", n("Inaccurate")]], "Fix before launch.");
+  step([["Detracts", "detracts", n("Detracts")]], "Fix before launch, or name an owner and a fix date.");
+  step([["To confirm", "confirm", D.confirms.length]], "Confirm or correct the tool's answers.");
+  const HOW = { "On screen": "on screen", "Screen reader": "with a screen reader", "Source documents": "against source documents", "Judgment call": "judgment calls" };
+  const how = {}; D.checks.forEach(c => { const h = HOW[c.how] || "other"; how[h] = (how[h] || 0) + 1; });
+  step([["To check", "check", D.checks.length]], "Check manually: " + Object.entries(how).map(([h, c]) => `${c} ${h}`).join(", ") + ".");
+  step([["Adds effort", "effort", n("Adds effort")], ["Minor error", "minor", n("Minor error")]], "Can launch. Fix in the next revision.");
+  for (const k of ["fixes", "confirms", "checks"]) document.getElementById("n-" + k).textContent = `(${SECTIONS[k].length})`;
+
+  // Filters
+  const filters = document.getElementById("filters");
+  LEVELS.forEach(([name, c]) => {
+    const b = el("button", { type: "button", class: "pill " + c, "aria-pressed": String(state.filters.includes(name)) }, `${name} ${n(name)}`);
+    b.addEventListener("click", () => {
+      state.filters = state.filters.includes(name) ? state.filters.filter(x => x !== name) : state.filters.concat(name);
+      b.setAttribute("aria-pressed", String(state.filters.includes(name))); save(); applyFilters();
+      const c = visibleCount();
+      live(state.filters.length ? `Showing ${c} ${c === 1 ? "fix" : "fixes"}: ${state.filters.join(", ")}` : `Showing all ${D.fixes.length} fixes`);
+    });
+    filters.append(b);
+  });
+  filters.append(el("button", { type: "button", class: "linkbtn", onclick: () => { state.filters = []; save();
+    filters.querySelectorAll(".pill").forEach(p => p.setAttribute("aria-pressed", "false")); applyFilters(); live(`Showing all ${D.fixes.length} fixes`); } }, "Show all"));
+  const shown = t => !state.filters.length || state.filters.includes(t.level);
+  const visibleCount = () => D.fixes.filter(shown).length;
+  const applyFilters = () => document.querySelectorAll("#fixes .task").forEach(li => li.hidden = !shown(byId[li.dataset.id]));
+
+  // Moving
+  function move(sec, id, to, focusSel) {
+    const o = state.order[sec], from = o.indexOf(id);
+    if (to < 0 || to >= o.length || to === from) { live("Already there"); return; }
+    o.splice(from, 1); o.splice(to, 0, id); save(); render(sec);
+    live(`${byId[id].short} moved to ${to + 1} of ${o.length}`);
+    const li = document.querySelector(`#${sec} [data-id="${id}"]`);
+    const f = li && (li.querySelector(focusSel) && !li.querySelector(focusSel).disabled ? li.querySelector(focusSel) : li.querySelector("button, select"));
+    if (f) f.focus();
+  }
+  // Up/down step over rows hidden by a filter, so every press visibly moves the row.
+  const neighbour = (sec, id, dir) => { const o = state.order[sec]; let i = o.indexOf(id) + dir;
+    while (i >= 0 && i < o.length && sec === "fixes" && !shown(byId[o[i]])) i += dir; return i; };
+
+  function render(sec) {
+    const ol = document.getElementById(sec); ol.innerHTML = "";
+    const o = state.order[sec];
+    if (!o.length) { ol.append(el("li", { class: "empty", text: `No ${TITLES[sec]}.` })); return; }
+    o.forEach((id, i) => {
+      const t = byId[id];
+      const head = el("div", { class: "head" });
+      if (t.level) head.append(el("span", { class: "badge " + cls(t.level), text: t.level }));
+      head.append(el("span", { class: "short", text: t.short }), el("span", { class: "num", text: "#" + t.item }));
+      if (t.also && t.also.length) head.append(el("span", { class: "also", text: "Also: " + t.also.join(", ") }));
+      const body = el("div", {}, head, el("p", { class: "what", text: t.text }));
+      if (t.details) body.append(el("p", { class: "impact", text: t.details }));
+      if (t.where) body.append(el("div", { class: "where", text: "Where: " + t.where }));
+      const label = `${t.short} #${t.item}`;
+      const sel = el("select", { "aria-label": `Move ${label} to` },
+        el("option", { value: "", text: "Move to…" }), el("option", { value: "top", text: "Top" }),
+        ...(t.level ? [el("option", { value: "level", text: `Top of ${t.level}` })] : []), el("option", { value: "bottom", text: "Bottom" }));
+      sel.addEventListener("change", () => { const val = sel.value; if (!val) return;
+        let to = val === "top" ? 0 : val === "bottom" ? o.length - 1 : o.findIndex(x => byId[x].level === t.level);
+        if (val === "level" && o.indexOf(id) < to) to = to - 1;
+        move(sec, id, Math.max(0, to), "select"); });
+      const up = el("button", { type: "button", class: "btn up", "aria-label": `Move ${label} up` }, "↑ Up");
+      const down = el("button", { type: "button", class: "btn down", "aria-label": `Move ${label} down` }, "↓ Down");
+      up.addEventListener("click", () => move(sec, id, neighbour(sec, id, -1), ".up"));
+      down.addEventListener("click", () => move(sec, id, neighbour(sec, id, 1), ".down"));
+      const nid = "n-" + id;
+      const ta = el("textarea", { id: nid, rows: "2" }); ta.value = state.notes[id] || "";
+      let timer; ta.addEventListener("input", () => { clearTimeout(timer); timer = setTimeout(() => { state.notes[id] = ta.value; save(); }, 300); });
+      body.append(el("div", { class: "controls" }, up, down, sel),
+        el("div", { class: "notes" }, el("label", { for: nid, text: "Notes" }), ta));
+      const grip = el("span", { class: "grip", "aria-hidden": "true", title: "Drag to reorder" }, "⠿");
+      const li = el("li", { class: "task", "data-id": id },
+        el("div", { class: "side" }, el("span", { class: "rank", text: String(i + 1) }), grip), body);
+      // Drag and drop, started from the grip only.
+      grip.addEventListener("mousedown", () => li.draggable = true);
+      grip.addEventListener("mouseup", () => li.draggable = false); // pressed without dragging
+      li.addEventListener("dragstart", e => { li.classList.add("dragging"); e.dataTransfer.effectAllowed = "move"; e.dataTransfer.setData("text/plain", id); });
+      li.addEventListener("dragend", () => { li.draggable = false; li.classList.remove("dragging"); });
+      li.addEventListener("dragover", e => { e.preventDefault(); li.classList.add("over"); });
+      li.addEventListener("dragleave", () => li.classList.remove("over"));
+      li.addEventListener("drop", e => { e.preventDefault(); li.classList.remove("over");
+        const dragged = e.dataTransfer.getData("text/plain"); if (!state.order[sec].includes(dragged)) return;
+        move(sec, dragged, state.order[sec].indexOf(id), ".up"); });
+      ol.append(li);
+    });
+    if (sec === "fixes") applyFilters();
+  }
+  Object.keys(SECTIONS).forEach(render);
+
+  // Full checklist
+  const tb = document.getElementById("full");
+  D.checklist.forEach(r => tb.append(el("tr", {},
+    el("td", {}, el("span", { class: "short", text: r.short }), el("br"), el("span", { class: "num", text: "#" + r.item })),
+    el("td", { text: r.criterion }), el("td", { text: r.who }),
+    el("td", {}, el("span", { class: "res " + r.result.replace("/", ""), text: r.result })), el("td", { text: r.note || "" }))));
+
+  // CSV export, in the current order with notes.
+  document.getElementById("csv").addEventListener("click", () => {
+    const rows = [D.csvHeader];
+    const TYPE = { fixes: "Fix", confirms: "Confirm", checks: "Check" };
+    for (const sec in SECTIONS) state.order[sec].forEach((id, i) => { const t = byId[id];
+      rows.push([TYPE[sec], i + 1, t.level || "", (t.also || []).join("; "), t.item, t.short, t.text, t.details || "", t.where || "", state.notes[id] || ""]); });
+    const csv = "﻿" + rows.map(r => r.map(c => { c = String(c); return /[",\n\r]/.test(c) ? '"' + c.replace(/"/g, '""') + '"' : c; }).join(",")).join("\r\n");
+    const a = el("a", { href: URL.createObjectURL(new Blob([csv], { type: "text/csv" })), download: D.meta.csvName });
+    document.body.append(a); a.click(); a.remove();
+    live("CSV downloaded");
+  });
+})();
+</script>
+</body>
+</html>

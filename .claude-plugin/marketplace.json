@@ -1,0 +1,12 @@
+{
+  "name": "learner-first-qa",
+  "description": "Course QA for instructional designers: a learner-first UX/LX review of eLearning courses and slide decks.",
+  "owner": { "name": "Chelsea Taylor", "url": "https://www.linkedin.com/in/chelseataylor" },
+  "plugins": [
+    {
+      "name": "learner-first-qa",
+      "source": "./plugins/learner-first-qa",
+      "description": "Reviews an eLearning course export or PowerPoint deck against the Learner-First UX/LX Checklist and writes an HTML report and a Kanban-ready CSV."
+    }
+  ]
+}

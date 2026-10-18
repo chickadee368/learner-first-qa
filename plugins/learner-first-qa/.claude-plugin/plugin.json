@@ -1,0 +1,10 @@
+{
+  "name": "learner-first-qa",
+  "version": "1.0.0",
+  "description": "Reviews an eLearning course export or PowerPoint deck against the Learner-First UX/LX Checklist and writes an HTML report and a Kanban-ready CSV.",
+  "author": { "name": "Chelsea Taylor", "url": "https://www.linkedin.com/in/chelseataylor" },
+  "homepage": "https://github.com/chickadee368/learner-first-qa",
+  "repository": "https://github.com/chickadee368/learner-first-qa",
+  "license": "MIT",
+  "keywords": ["instructional-design", "elearning", "accessibility", "qa", "wcag", "learning-experience"]
+}

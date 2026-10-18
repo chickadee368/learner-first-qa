@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Learner-First UX/LX Checklist</title>
+<meta name="description" content="The full Learner-First UX/LX Checklist: severity levels, rules, and every criterion with who checks it.">
+<link rel="stylesheet" href="site.css">
+</head>
+<body>
+<!-- Generated from checklist.md by tools/build-checklist-page.js. Edit checklist.md, then run the script. -->
+<a class="skip" href="#main">Skip to content</a>
+<header class="site"><div class="inner">
+  <a class="brand" href="index.html">Learner-First QA</a>
+  <nav class="site" aria-label="Site">
+    <a href="index.html">Overview</a>
+    <a href="guide.html">Getting started</a>
+    <a href="checklist.html" aria-current="page">Checklist</a>
+    <a href="sample-report.html">Sample report</a>
+    <a href="https://github.com/chickadee368/learner-first-qa">GitHub</a>
+  </nav>
+</div></header>
+<main id="main" class="checklist">
+<h1>Learner-First UX/LX Checklist</h1>
+<p class="toc"><a href="#purpose">Purpose</a> · <a href="#severity-levels">Severity levels</a> · <a href="#part-1-user-experience-ux">Part 1: User Experience (UX)</a> · <a href="#part-2-learner-experience-lx">Part 2: Learner Experience (LX)</a> · <a href="#references">References</a></p>
+<p>Created by <a href="https://www.linkedin.com/in/chelseataylor">Chelsea Taylor</a> · Licensed <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></p>
+<h2 id="purpose">Purpose</h2>
+<p>The purpose of this checklist is to measure the user and learner experience across digital learning content, such as eLearning course exports and slide decks.</p>
+<ul><li><strong>User Experience</strong> is the extent to which a user, regardless of impairment, can understand and interact with the content.</li><li><strong>Learner Experience</strong> is the extent to which a learner, regardless of impairment, can achieve learning outcomes.</li></ul>
+<h2 id="severity-levels">Severity levels</h2>
+<p>The test for every level: <strong>how does this impact the learner?</strong> It keeps the focus on the learner and their experience, not on design or speed.</p>
+<div class="wrap"><table><thead><tr><th scope="col">#</th><th scope="col">Level</th><th scope="col">Definition</th><th scope="col">Example</th><th scope="col">Launch</th></tr></thead><tbody>
+<tr><td>1</td><td><span class="pill blocked">Blocked</span></td><td>The learner can't access the content.</td><td>Video with no captions and no transcript; a lesson or page with no content</td><td>Must be fixed before launch</td></tr>
+<tr><td>2</td><td><span class="pill inaccurate">Inaccurate</span></td><td>The content is wrong, and a learner who follows it could make a mistake on the job. Wrong high-stakes content is always Inaccurate.</td><td>A wrong fee amount</td><td>Must be fixed before launch</td></tr>
+<tr><td>3</td><td><span class="pill detracts">Detracts</span></td><td>The learner gets less: less of the content, or a worse version of it than other learners get.</td><td>Transcript but no captions</td><td>Fix before launch, or launch with a named owner and a fix date</td></tr>
+<tr><td>4</td><td><span class="pill effort">Adds effort</span></td><td>The learner gets the same content but has to work harder for it, which can hurt retention depending on subject, familiarity, distraction and pressure.</td><td>A misspelling that makes them re-read</td><td>Can launch; fix in the next revision</td></tr>
+<tr><td>5</td><td><span class="pill minor">Minor error</span></td><td>Incorrect, but doesn't block understanding. Each one wears down the learner's trust in the content, and in the designer.</td><td>A missing comma; a wrong founding year</td><td>Can launch; fix in the next revision</td></tr>
+</tbody></table></div>
+<p><strong>High-stakes content</strong> (wrong content here is always Inaccurate, in any module):</p>
+<ul><li>Money: prices, fees, rates, amounts, billing steps</li><li>Legal &amp; compliance: regulations, policy, contract terms, how personal data is handled</li><li>Safety &amp; security: physical safety, health, passwords, access, identity checks and fraud</li><li>Client-facing: anything the learner says, sends or shows to a customer</li><li>Can't be undone: steps like approve, submit, delete, send</li></ul>
+<p><strong>Rules:</strong></p>
+<ul><li>Each finding gets ONE level, the most severe that applies. Other levels it hits go in an <strong>Also</strong> column.</li><li>Severity sets the suggested fix order. Within a level, findings with more Also entries sort first.</li><li>The tool suggests the fix order; the reviewer and the designer can override it.</li><li>Blocked and Detracts never move because content is high-stakes.</li><li>Text that fails contrast (item 1) is <strong>Detracts</strong>: low-vision learners get a worse version of the same content. Text under 2:1 is <strong>Blocked</strong>: it is too faint to read at all.</li><li>Missing required information (an amount, a step, a setting) is <strong>Inaccurate</strong> when following the course without it could lead to a mistake on the job. When the content is only less complete, it is <strong>Detracts</strong>.</li><li>A large pile of Minor error findings can raise severity, but only rarely. No threshold set.</li></ul>
+<p><strong>Who checks:</strong></p>
+<ul><li><strong>File:</strong> the tool answers it from the course files.</li><li><strong>Draft:</strong> the tool drafts an answer, marked unconfirmed; a human confirms.</li><li><strong>Human:</strong> left open for a person.</li><li>If the tool ever grades long-form answers, a person confirms the grade.</li></ul>
+<h2 id="part-1-user-experience-ux">Part 1: User Experience (UX)</h2>
+<h3 id="visual">Visual</h3>
+<div class="wrap"><table><thead><tr><th scope="col">#</th><th scope="col">Short name</th><th scope="col">Criterion</th><th scope="col">Who checks</th><th scope="col">Reference</th></tr></thead><tbody>
+<tr id="item-1"><td>1</td><td><strong>Contrast</strong></td><td>Does the text pass the WebAIM contrast checker with a ratio of at least 4.5:1 for normal text and 3:1 for larger text?</td><td>File if colors are in the files, else Human</td><td>WebAIM Contrast Checker</td></tr>
+<tr id="item-2"><td>2</td><td><strong>Color as only indicator</strong></td><td>Are there any instances where color is the only indication of meaning?</td><td>Draft</td><td></td></tr>
+<tr id="item-47"><td>47</td><td><strong>Zoom</strong></td><td>Does the content still work when zoomed to 200%, with nothing cut off, overlapping or hidden?</td><td>Human</td><td>W3C (2023), WCAG 1.4.4</td></tr>
+</tbody></table></div>
+<h3 id="images">Images</h3>
+<div class="wrap"><table><thead><tr><th scope="col">#</th><th scope="col">Short name</th><th scope="col">Criterion</th><th scope="col">Who checks</th><th scope="col">Reference</th></tr></thead><tbody>
+<tr id="item-3"><td>3</td><td><strong>Alt text</strong></td><td>Is there Alt Text for all images and tables?</td><td>File</td><td>WebAIM, Alternative Text</td></tr>
+<tr id="item-4"><td>4</td><td><strong>Decorative images</strong></td><td>If the image is for aesthetics only, is it marked decorative?</td><td>File</td><td>WebAIM, Alternative Text</td></tr>
+<tr id="item-40"><td>40</td><td><strong>Decorative not clickable</strong></td><td>Are decorative images non-interactive (not zoomable or clickable)?</td><td>File if the settings are in the export, else Human</td><td></td></tr>
+<tr id="item-43"><td>43</td><td><strong>Branding</strong></td><td>Does the content follow the organization's branding requirements, including any labels required on screenshots and images?</td><td>Human</td><td></td></tr>
+</tbody></table></div>
+<h3 id="structure-and-links">Structure and links</h3>
+<div class="wrap"><table><thead><tr><th scope="col">#</th><th scope="col">Short name</th><th scope="col">Criterion</th><th scope="col">Who checks</th><th scope="col">Reference</th></tr></thead><tbody>
+<tr id="item-5"><td>5</td><td><strong>Headings</strong></td><td>Are heading styles and/or header rows used for text and tables?</td><td>File</td><td>WebAIM, Microsoft Word</td></tr>
+<tr id="item-6"><td>6</td><td><strong>Link text</strong></td><td>Are hyperlinks descriptive?</td><td>File</td><td>WebAIM, Links and Hypertext</td></tr>
+<tr id="item-7"><td>7</td><td><strong>Free navigation</strong></td><td>Can the learner freely navigate the content at their own pace?</td><td>Human</td><td>Pappas (2015)</td></tr>
+<tr id="item-48"><td>48</td><td><strong>Real lists</strong></td><td>Are lists built as real lists, not typed dashes or symbols?</td><td>File</td><td>W3C (2023), WCAG 1.3.1</td></tr>
+</tbody></table></div>
+<h3 id="keyboard">Keyboard</h3>
+<div class="wrap"><table><thead><tr><th scope="col">#</th><th scope="col">Short name</th><th scope="col">Criterion</th><th scope="col">Who checks</th><th scope="col">Reference</th></tr></thead><tbody>
+<tr id="item-44"><td>44</td><td><strong>Keyboard access</strong></td><td>Can every button, link and interaction be reached and used with the keyboard alone?</td><td>Human</td><td>W3C (2023), WCAG 2.1.1</td></tr>
+<tr id="item-45"><td>45</td><td><strong>Visible focus</strong></td><td>Can you always see where the keyboard focus is?</td><td>Human</td><td>W3C (2023), WCAG 2.4.7</td></tr>
+<tr id="item-46"><td>46</td><td><strong>No keyboard traps</strong></td><td>Can the learner always move the keyboard focus away from any element without getting stuck?</td><td>Human</td><td>W3C (2023), WCAG 2.1.2</td></tr>
+</tbody></table></div>
+<h3 id="audio-and-video">Audio and video</h3>
+<div class="wrap"><table><thead><tr><th scope="col">#</th><th scope="col">Short name</th><th scope="col">Criterion</th><th scope="col">Who checks</th><th scope="col">Reference</th></tr></thead><tbody>
+<tr id="item-8"><td>8</td><td><strong>Captions</strong></td><td>Are there captions and/or transcripts provided for all audio?</td><td>File</td><td>WebAIM, Captions</td></tr>
+<tr id="item-9"><td>9</td><td><strong>Caption accuracy</strong></td><td>If there are captions, do they align with the spoken audio?</td><td>File if there is a caption file and a transcript, else Human. Checking against the audio itself needs speech-to-text, which the tool doesn't do.</td><td>Arsic (2022)</td></tr>
+<tr id="item-10"><td>10</td><td><strong>Caption width</strong></td><td>If there are captions, are they an appropriate width for the screen so that the learner isn't moving their head to read the caption?</td><td>Human</td><td>Arsic (2022)</td></tr>
+</tbody></table></div>
+<h3 id="slides">Slides</h3>
+<div class="wrap"><table><thead><tr><th scope="col">#</th><th scope="col">Short name</th><th scope="col">Criterion</th><th scope="col">Who checks</th><th scope="col">Reference</th></tr></thead><tbody>
+<tr id="item-11"><td>11</td><td><strong>Slide reading order</strong></td><td>If there are slides, is the reading order correct?</td><td>File</td><td>WebAIM, PowerPoint</td></tr>
+<tr id="item-12"><td>12</td><td><strong>Slide titles</strong></td><td>If there are slides, are the slides titled?</td><td>File</td><td></td></tr>
+<tr id="item-13"><td>13</td><td><strong>Slide layouts</strong></td><td>If there are slides, is content aligned with slide layouts?</td><td>File</td><td>WebAIM, PowerPoint</td></tr>
+<tr id="item-14"><td>14</td><td><strong>Theme change</strong></td><td>If there are slides, does the content make sense when the theme is changed?</td><td>Human</td><td></td></tr>
+</tbody></table></div>
+<h3 id="assistive-technology">Assistive technology</h3>
+<div class="wrap"><table><thead><tr><th scope="col">#</th><th scope="col">Short name</th><th scope="col">Criterion</th><th scope="col">Who checks</th><th scope="col">Reference</th></tr></thead><tbody>
+<tr id="item-15"><td>15</td><td><strong>Accessibility scanner</strong></td><td>If there is an accessibility scanner built in to the program, do any issues appear?</td><td>Human</td><td></td></tr>
+<tr id="item-16"><td>16</td><td><strong>Windows Narrator</strong></td><td>Does the built-in Windows screenreader narrate the text as intended?</td><td>Human</td><td>Microsoft (2023)</td></tr>
+<tr id="item-17"><td>17</td><td><strong>Mac VoiceOver</strong></td><td>Does the built-in Mac screenreader narrate the text as intended?</td><td>Human</td><td>Apple (2024)</td></tr>
+</tbody></table></div>
+<h2 id="part-2-learner-experience-lx">Part 2: Learner Experience (LX)</h2>
+<div class="wrap"><table><thead><tr><th scope="col">#</th><th scope="col">Short name</th><th scope="col">Criterion</th><th scope="col">Who checks</th><th scope="col">Reference</th></tr></thead><tbody>
+<tr id="item-18"><td>18</td><td><strong>Outcomes shown</strong></td><td>Are the learning outcomes displayed to the learner?</td><td>File</td><td></td></tr>
+<tr id="item-19a"><td>19a</td><td><strong>Reading level</strong></td><td>Is the reading level appropriate?</td><td>File</td><td></td></tr>
+<tr id="item-19b"><td>19b</td><td><strong>Audience fit</strong></td><td>Is the text easy to comprehend for this audience?</td><td>Draft if the intake describes the audience, else Human</td><td></td></tr>
+<tr id="item-20"><td>20</td><td><strong>Terms defined</strong></td><td>If there are uncommon terms, are they defined?</td><td>File</td><td></td></tr>
+</tbody></table></div>
+<h3 id="alignment">Alignment</h3>
+<div class="wrap"><table><thead><tr><th scope="col">#</th><th scope="col">Short name</th><th scope="col">Criterion</th><th scope="col">Who checks</th><th scope="col">Reference</th></tr></thead><tbody>
+<tr id="item-21"><td>21</td><td><strong>Observable verbs</strong></td><td>Does each learning objective use an observable verb? Can the objective actually be measured?</td><td>File</td><td>Bloom (1956)</td></tr>
+<tr id="item-22a"><td>22a</td><td><strong>Objective vs format</strong></td><td>Does the level of each objective match what the format lets a learner demonstrate?</td><td>Draft</td><td>Bloom (1956)</td></tr>
+<tr id="item-22b"><td>22b</td><td><strong>Practice outside course</strong></td><td>If the objectives need higher-level practice than the course can provide (analyze, evaluate, argue), does the learning plan place that practice outside the course (video, practice with a buddy)?</td><td>Human</td><td>Bloom (1956)</td></tr>
+<tr id="item-23"><td>23</td><td><strong>Content order</strong></td><td>Does the order of the content build toward the objectives?</td><td>Draft</td><td></td></tr>
+<tr id="item-24"><td>24</td><td><strong>Assessment level</strong></td><td>Does the assessment test at the same level as the objective's verb?</td><td>File</td><td>Bloom (1956)</td></tr>
+<tr id="item-25"><td>25</td><td><strong>Proves knowledge</strong></td><td>If a learner gets the answers right, can you strongly argue they know the topic?</td><td>Human</td><td></td></tr>
+</tbody></table></div>
+<h3 id="assessment-quality">Assessment quality</h3>
+<div class="wrap"><table><thead><tr><th scope="col">#</th><th scope="col">Short name</th><th scope="col">Criterion</th><th scope="col">Who checks</th><th scope="col">Reference</th></tr></thead><tbody>
+<tr id="item-26"><td>26</td><td><strong>Plausible distractors</strong></td><td>Multiple choice: are all the wrong answers plausible, so the right answer isn't obvious among unrelated or random options?</td><td>File</td><td></td></tr>
+<tr id="item-27"><td>27</td><td><strong>Requires recall</strong></td><td>Does the assessment make the learner think back on the content, rather than being answerable without taking the course?</td><td>File</td><td></td></tr>
+<tr id="item-28"><td>28</td><td><strong>Covered in course</strong></td><td>Is everything the assessment asks about taught in this course, not in a team wiki or another outside source? <em>(N/A if the course has a prerequisite course.)</em></td><td>File</td><td></td></tr>
+</tbody></table></div>
+<h3 id="practice-and-feedback">Practice and feedback</h3>
+<div class="wrap"><table><thead><tr><th scope="col">#</th><th scope="col">Short name</th><th scope="col">Criterion</th><th scope="col">Who checks</th><th scope="col">Reference</th></tr></thead><tbody>
+<tr id="item-29"><td>29</td><td><strong>Feedback given</strong></td><td>Does every practice question give the learner feedback?</td><td>File</td><td></td></tr>
+<tr id="item-30"><td>30</td><td><strong>Feedback explains why</strong></td><td>Does the feedback explain <em>why</em> an answer is wrong, beyond "incorrect," "try again" or "not quite"?</td><td>File</td><td></td></tr>
+<tr id="item-31"><td>31</td><td><strong>Feedback steers</strong></td><td>Does the feedback address why a learner might have chosen that answer, and steer them toward the correct one, so they don't reach it by process of elimination? (A visual can help, like a picture showing where things are.)</td><td>File</td><td></td></tr>
+<tr id="item-32"><td>32</td><td><strong>Leave and return</strong></td><td>Can the learner leave the quiz to check the content and come back where they left off? Learners have their notes on the job, so the quiz shouldn't test memorization.</td><td>Human</td><td></td></tr>
+</tbody></table></div>
+<h3 id="relevance">Relevance</h3>
+<div class="wrap"><table><thead><tr><th scope="col">#</th><th scope="col">Short name</th><th scope="col">Criterion</th><th scope="col">Who checks</th><th scope="col">Reference</th></tr></thead><tbody>
+<tr id="item-33"><td>33</td><td><strong>Learner language</strong></td><td>Does the course use the language learners actually use on the job (acronyms, sales methodologies, team terms)?</td><td>Human</td><td></td></tr>
+<tr id="item-34"><td>34</td><td><strong>Real processes</strong></td><td>Does the content follow the existing processes and procedures the learner will use?</td><td>Human</td><td></td></tr>
+<tr id="item-35"><td>35</td><td><strong>Tools explained</strong></td><td>If the learner needs a specific software or tool, does the content explain it and the scenario they'd use it in?</td><td>File</td><td></td></tr>
+<tr id="item-36"><td>36</td><td><strong>Real problems</strong></td><td>Does the content include real problems the learner will face (case studies, scenario-based questions)?</td><td>File</td><td></td></tr>
+<tr id="item-37a"><td>37a</td><td><strong>Links work</strong></td><td>Do the links work?</td><td>File</td><td></td></tr>
+<tr id="item-37b"><td>37b</td><td><strong>Outdated content</strong></td><td>Is the information still current? (Tool flags dates, "as of" lines, version numbers, retired names, redirecting links.)</td><td>Draft</td><td></td></tr>
+<tr id="item-37c"><td>37c</td><td><strong>Team repositories</strong></td><td>Do links go to the repositories the team actually uses?</td><td>Human</td><td></td></tr>
+<tr id="item-38a"><td>38a</td><td><strong>Connects within course</strong></td><td>Does the content connect to earlier or later parts of this course?</td><td>Draft</td><td></td></tr>
+<tr id="item-38b"><td>38b</td><td><strong>Connects to experience</strong></td><td>Does the content connect to the learner's past experience or other courses?</td><td>Human</td><td></td></tr>
+<tr id="item-39"><td>39</td><td><strong>Sign-off and beta</strong></td><td>Has a manager signed off, and have team members beta tested the course?</td><td>Human</td><td></td></tr>
+<tr id="item-41"><td>41</td><td><strong>Screenshots current</strong></td><td>Do screenshots match the current product UI?</td><td>Human</td><td></td></tr>
+<tr id="item-42"><td>42</td><td><strong>Product names</strong></td><td>Are product names written with the company's exact capitalization (CamelCase, Sentence case, lowercase), not what a tool autocorrected them to?</td><td>File if product names are given in the intake field, else Draft (flags inconsistent spellings)</td><td></td></tr>
+</tbody></table></div>
+<h2 id="references">References</h2>
+<ul><li>Apple. (2024). VoiceOver User Guide. https://support.apple.com/guide/voiceover/welcome/mac</li><li>Arsic, K. M. (2022, July 30). The (Un)Written Closed Captioning Standards and Protocol. Subly. https://www.getsubly.com/post/captioning-standards-and-protocol</li><li>Bloom, B. S. (Ed.). (1956). Taxonomy of educational objectives: The classification of educational goals. Handbook I: Cognitive domain. David McKay.</li><li>Microsoft. (2023, October 9). How to turn on and use Narrator in Windows 11. https://www.microsoft.com/en-us/windows/learning-center/how-to-use-narrator</li><li>Pappas, C. (2015, June 15). Effective eLearning Navigation: 5 Key Principles! eLearning Industry. https://elearningindustry.com/effective-elearning-navigation-5-key-principles</li><li>WebAIM. (2024a). Alternative Text. https://webaim.org/techniques/alttext/</li><li>WebAIM. (2024b). Captions, Transcripts, and Audio Descriptions. https://webaim.org/techniques/captions/</li><li>WebAIM. (2024c). Contrast Checker. https://webaim.org/resources/contrastchecker/</li><li>WebAIM. (2024d). Links and Hypertext. https://webaim.org/techniques/hypertext/</li><li>WebAIM. (2024e). Microsoft Word. https://webaim.org/techniques/word/</li><li>WebAIM. (2024f). PowerPoint Accessibility. https://webaim.org/techniques/powerpoint/#order</li><li>W3C. (2023). Web Content Accessibility Guidelines (WCAG) 2.2. https://www.w3.org/TR/WCAG22/</li></ul>
+</main>
+<footer><div class="inner">
+  Created by <a href="https://www.linkedin.com/in/chelseataylor">Chelsea Taylor</a>. Checklist under
+  <a href="https://github.com/chickadee368/learner-first-qa/blob/main/LICENSE-CONTENT">CC BY 4.0</a>; code under the
+  <a href="https://github.com/chickadee368/learner-first-qa/blob/main/LICENSE">MIT License</a>.
+  Fonts: Fraunces and DM Sans (SIL Open Font License).
+</div></footer>
+</body>
+</html>

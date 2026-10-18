@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Learner-First QA</title>
+<meta name="description" content="A free Claude skill that reviews an eLearning course or slide deck for accessibility and learning design, and hands back a checklist you validate.">
+<link rel="stylesheet" href="site.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="site"><div class="inner">
+  <a class="brand" href="index.html">Learner-First QA</a>
+  <nav class="site" aria-label="Site">
+    <a href="index.html" aria-current="page">Overview</a>
+    <a href="guide.html">Getting started</a>
+    <a href="checklist.html">Checklist</a>
+    <a href="sample-report.html">Sample report</a>
+    <a href="https://github.com/chickadee368/learner-first-qa">GitHub</a>
+  </nav>
+</div></header>
+
+<main id="main">
+  <h1>Course QA that starts with the learner</h1>
+  <p class="lede">A free Claude skill that reviews your eLearning course or slide deck for accessibility and learning
+  design, then hands back a checklist you validate.</p>
+  <div class="actions">
+    <a class="btn primary" href="guide.html">Get started</a>
+    <a class="btn" href="sample-report.html">See a sample report</a>
+  </div>
+
+  <figure>
+    <img src="images/report-top.png" width="1100" height="1150" alt="The top of a Course QA report: the course name and run details, then Your next steps with a launch call and colored severity pills">
+    <figcaption>A report for a sample sourdough baking course, made for testing.</figcaption>
+  </figure>
+
+  <h2>What it does</h2>
+  <p>You give Claude an exported course or a PowerPoint deck. It reads everything a learner would see and hear and
+  checks it against <a href="checklist.html">53 criteria</a>. You get back an HTML report, ranked by how much each problem affects the learner,
+  and a CSV you can drop into a Kanban board.</p>
+  <p>It answers what it can from the files. When it isn't sure, it drafts an answer for you to confirm. Anything it
+  can't check from the files, like keyboard use or how a screen reader sounds, is left for you, with a note on what
+  to look at.</p>
+
+  <div class="cards">
+    <div class="card"><h3>Accessibility</h3><p>Contrast, alt text, headings, captions, link text, keyboard and zoom checks, slide reading order.</p></div>
+    <div class="card"><h3>Learning design</h3><p>Objectives, whether the quiz tests what was taught, wrong answers that are too easy, feedback that explains why.</p></div>
+    <div class="card"><h3>Relevance</h3><p>Real scenarios, tools explained, broken links, outdated details, inconsistent product names.</p></div>
+  </div>
+
+  <h2>Severity is judged by the learner</h2>
+  <p>Every finding gets one level, chosen by asking one question: how does this affect the learner?</p>
+  <div class="wrap"><table>
+    <thead><tr><th scope="col">Level</th><th scope="col">What it means for the learner</th><th scope="col">Launch</th></tr></thead>
+    <tbody>
+      <tr><td><span class="pill blocked">Blocked</span></td><td>They can't access the content.</td><td>Must be fixed before launch</td></tr>
+      <tr><td><span class="pill inaccurate">Inaccurate</span></td><td>The content is wrong, and following it could cause a mistake on the job.</td><td>Must be fixed before launch</td></tr>
+      <tr><td><span class="pill detracts">Detracts</span></td><td>They get less of the content, or a worse version of it, than other learners.</td><td>Fix before launch, or name an owner and a fix date</td></tr>
+      <tr><td><span class="pill effort">Adds effort</span></td><td>They get the same content but have to work harder for it.</td><td>Can launch; fix in the next revision</td></tr>
+      <tr><td><span class="pill minor">Minor error</span></td><td>Something is incorrect but doesn't block understanding. Each one wears down trust.</td><td>Can launch; fix in the next revision</td></tr>
+    </tbody>
+  </table></div>
+  <p>Wrong content about money, legal and compliance matters, safety and security, anything client-facing, or steps
+  that can't be undone is always Inaccurate. <a href="checklist.html#severity-levels">See the full severity rules.</a></p>
+
+  <h2>Where it runs</h2>
+  <div class="cards">
+    <div class="card"><h3>Claude desktop app</h3><p>Upload the skill once, then attach a course to any chat. No installs.</p></div>
+    <div class="card"><h3>claude.ai</h3><p>The same upload works on the web, since skills belong to your account.</p></div>
+    <div class="card"><h3>Claude Code</h3><p>For people comfortable in a terminal. Install it as a plugin or a folder.</p></div>
+  </div>
+  <p>All three were tested on the same course and found the same core problems. <a href="guide.html">The guide</a>
+  walks through each one.</p>
+
+  <h2>Your course stays yours</h2>
+  <ul>
+    <li>Your course content is sent to Claude as part of the review, like anything else you share in a Claude chat. Check your organization's rules before reviewing confidential courses.</li>
+    <li>To check links, it tries to visit each link in the course. The app asks your permission first.</li>
+    <li>Nothing else leaves your computer. The skill doesn't track usage, and the report works offline.</li>
+  </ul>
+</main>
+
+<footer><div class="inner">
+  Created by <a href="https://www.linkedin.com/in/chelseataylor">Chelsea Taylor</a>. Code under the
+  <a href="https://github.com/chickadee368/learner-first-qa/blob/main/LICENSE">MIT License</a>; checklist under
+  <a href="https://github.com/chickadee368/learner-first-qa/blob/main/LICENSE-CONTENT">CC BY 4.0</a>.
+  Fonts: Fraunces and DM Sans (SIL Open Font License).
+</div></footer>
+</body>
+</html>

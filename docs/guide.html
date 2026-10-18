@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Getting Started · Learner-First QA</title>
+<meta name="description" content="Step-by-step setup for the Learner-First QA skill in the Claude desktop app, claude.ai and Claude Code, and how to read the report.">
+<link rel="stylesheet" href="site.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="site"><div class="inner">
+  <a class="brand" href="index.html">Learner-First QA</a>
+  <nav class="site" aria-label="Site">
+    <a href="index.html">Overview</a>
+    <a href="guide.html" aria-current="page">Getting started</a>
+    <a href="checklist.html">Checklist</a>
+    <a href="sample-report.html">Sample report</a>
+    <a href="https://github.com/chickadee368/learner-first-qa">GitHub</a>
+  </nav>
+</div></header>
+
+<main id="main">
+  <h1>Getting started</h1>
+  <p class="lede">You don't need to code to use this. If you use the Claude desktop app or claude.ai, setup is one
+  upload. Claude Code users have their own section below.</p>
+  <p><a href="#app">In the desktop app or claude.ai</a> · <a href="#code">In Claude Code</a> ·
+  <a href="#report">Reading your report</a> · <a href="#questions">Common questions</a></p>
+
+  <h2 id="before">Before you start</h2>
+  <p>Have your course file ready:</p>
+  <ul>
+    <li><strong>An eLearning course:</strong> in your authoring tool, export or publish it as a web (HTML) package.
+    You'll get a .zip file. Don't unzip it. So far it has been tested with one authoring tool's export, so exports
+    from other tools may not be read fully. If it doesn't recognize your export, it tells you and asks before trying.</li>
+    <li><strong>A slide deck:</strong> the PowerPoint .pptx file as it is.</li>
+  </ul>
+  <p>It needs the exported file. You can't give it a link to a course, such as a review link or a share link from
+  your authoring tool. (It does visit the links inside a course, to check that they work.)</p>
+
+  <h2 id="app">In the Claude desktop app or claude.ai</h2>
+  <p>You'll need a paid Claude plan. It was tested on Claude Pro.</p>
+  <ol class="steps">
+    <li><strong>Download the skill.</strong> Get <code>course-qa.zip</code> from the
+      <a href="https://github.com/chickadee368/learner-first-qa/releases">Releases page</a>. Leave it zipped.</li>
+    <li><strong>Upload it to Claude.</strong> In Claude, open <strong>Settings</strong>. Under <strong>Customize</strong>,
+      choose <strong>Skills</strong>, then <strong>Add → Upload skill</strong>, and pick the zip. Skills belong to your
+      account, so uploading once makes it available in both the desktop app and claude.ai.
+      <figure><a class="zoom" href="images/claude-settings-skills.png" target="_blank" rel="noopener"><img src="images/claude-settings-skills.png" width="1792" height="1043" alt="Claude Settings with Skills selected under Customize. The Add menu is open, showing Upload skill at the top. Opens the full-size image in a new tab."></a>
+        <figcaption>Settings → Skills (under Customize) → Add → Upload skill. Select the image to see it full size.</figcaption></figure></li>
+    <li><strong>Turn on code execution.</strong> In <strong>Settings → Capabilities</strong>, make sure code execution
+      is on. The skill runs a few small scripts while it reviews.</li>
+    <li><strong>Start a review.</strong> Start a new chat, attach your course .zip or .pptx, and type "Review this
+      course with the course-qa skill."</li>
+    <li><strong>Answer one optional question.</strong> Claude asks if there's anything it should know, like key
+      vocabulary, product names or who the learners are. Answer, or type "skip."</li>
+    <li><strong>Let it work.</strong> It tells you how many words the course has and roughly how many tokens the
+      review will use. A three-lesson course took 4 to 6 minutes in testing. To cancel, click stop.</li>
+    <li><strong>Download your report.</strong> When it's done, the report opens in a preview panel. Download the HTML
+      file and open it in your browser to add notes, reorder findings and export the CSV; those only work in the
+      downloaded copy.</li>
+  </ol>
+  <div class="note">
+    <p><strong>You may see permission requests.</strong> Claude asks before it visits the links in your course, to
+    check they work. It may also ask to run commands in its workspace while it builds the report. Those only touch
+    Claude's own working files, not your computer.</p>
+  </div>
+
+  <h2 id="code">In Claude Code</h2>
+  <p>Claude Code runs in a terminal. If you haven't used it, the desktop app path above is easier and gives the same
+  results.</p>
+  <ol class="steps">
+    <li><strong>Install Node.js.</strong> Download the LTS version from <a href="https://nodejs.org">nodejs.org</a>.
+      The skill uses it for its scripts.</li>
+    <li><strong>Install the skill.</strong> In Claude Code, run these two commands:
+      <pre><code>/plugin marketplace add chickadee368/learner-first-qa
+/plugin install learner-first-qa@learner-first-qa</code></pre>
+      Or copy the <code>plugins/learner-first-qa/skills/course-qa</code> folder from the repo into your skills folder:
+      <code>~/.claude/skills/</code> on a Mac, or <code>C:\Users\&lt;you&gt;\.claude\skills\</code> on Windows.</li>
+    <li><strong>Start a review.</strong> Open Claude Code in the folder that holds your course file. Type
+      <code>/learner-first-qa:course-qa</code> if you installed the plugin, or <code>/course-qa</code> if you copied
+      the folder. (Plugin commands always start with the plugin's name.) Then give it the course file's name.</li>
+    <li><strong>Answer the optional question,</strong> or type "skip." To cancel while it works, press Esc.</li>
+    <li><strong>Open your report.</strong> The HTML report and CSV are saved in the same folder. Running the same
+      course again on the same day adds a number to the file name, so earlier reports are never replaced.</li>
+  </ol>
+  <p>Tested on Windows. It should work on a Mac, but that hasn't been tested yet.</p>
+
+  <h2 id="report">Reading your report</h2>
+  <figure>
+    <img src="images/report-fixes.png" width="1100" height="1050" alt="The Fixes list: filter pills for each severity level, and ranked findings with Up, Down, Move to and a notes field">
+  </figure>
+  <h3>Start with "Your next steps"</h3>
+  <p>The box at the top says whether the course is ready to launch and what's on your plate: fixes to make before
+  launch, answers to confirm, and items to check yourself.</p>
+  <h3>Three lists</h3>
+  <ul>
+    <li><strong>Fixes</strong> are problems the tool found, ordered by severity. Click a colored pill to show only
+    that level. Click it again to show everything.</li>
+    <li><strong>Answers to confirm</strong> are checks the tool answered but can't be sure about. Read its answer and
+    agree or correct it.</li>
+    <li><strong>Items to check</strong> can't be judged from the files, like keyboard use or how a screen reader
+    sounds. Each one says what to look at.</li>
+  </ul>
+  <h3>Make it yours</h3>
+  <p>Reorder any list with the Up and Down buttons, the "Move to" menu, or by dragging the handle. Add notes to any
+  item. Your notes and order are saved in your browser, on that computer only.</p>
+  <h3>Move it to your board</h3>
+  <p>Click <strong>Download CSV</strong> to get every task, in your order, with your notes. Trello, Jira, Asana,
+  Notion and Monday can all import it.</p>
+  <div class="note">
+    <p><strong>In Notion:</strong> import the CSV, add a Board view, and group it by Type to get lanes for Fix,
+    Confirm and Check. Notion imports columns as text, so change Type (or Level) to a Select property first.</p>
+  </div>
+
+  <h2 id="questions">Common questions</h2>
+  <details><summary>Why are the results a little different each time I run it?</summary>
+    <p>An AI reviewer makes some judgment calls fresh each run. The big problems and the contrast results stay the
+    same, but wording and some severity levels can shift. That's why the report is built for a person to validate.</p></details>
+  <details><summary>Can I review a confidential course?</summary>
+    <p>Your course content is sent to Claude as part of the review, the same as anything you share in a Claude chat.
+    Check your organization's rules first. The skill itself doesn't track usage or report back to anyone.</p></details>
+  <details><summary>I can't find Settings → Skills.</summary>
+    <p>In Settings, look under the <strong>Customize</strong> heading for <strong>Skills</strong>. Claude's settings
+    change from time to time, so the exact spot may move.</p></details>
+  <details><summary>Does it work in the Claude mobile app?</summary>
+    <p>Uploaded skills show up there, but the mobile app hasn't been tested. Attaching a course and reading the report
+    are much easier on a computer.</p></details>
+  <details><summary>How many tokens does it use?</summary>
+    <p>It shows an estimate at the start, based on how much text the course has. A three-lesson course of about
+    9,000 words was estimated at about 45,000 tokens.</p></details>
+</main>
+
+<footer><div class="inner">
+  Created by <a href="https://www.linkedin.com/in/chelseataylor">Chelsea Taylor</a>. Code under the
+  <a href="https://github.com/chickadee368/learner-first-qa/blob/main/LICENSE">MIT License</a>; checklist under
+  <a href="https://github.com/chickadee368/learner-first-qa/blob/main/LICENSE-CONTENT">CC BY 4.0</a>.
+  Fonts: Fraunces and DM Sans (SIL Open Font License).
+</div></footer>
+</body>
+</html>
